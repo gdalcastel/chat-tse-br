@@ -17,8 +17,8 @@ Os arquivos vieram de [resultados.tse.jus.br](https://resultados.tse.jus.br). A 
 É preciso ter o Docker instalado.
 
 ```bash
-git clone https://github.com/gdalcastel/chatse.git
-cd chatse
+git clone https://github.com/gdalcastel/chat-tse-br.git
+cd chat-tse-br
 make run
 ```
 
@@ -60,8 +60,8 @@ A chave da OpenAI fica só nesse túnel, no seu computador. Ela não entra no Ch
 É preciso Python 3.11 ou mais novo.
 
 ```bash
-git clone https://github.com/gdalcastel/chatse.git
-cd chatse
+git clone https://github.com/gdalcastel/chat-tse-br.git
+cd chat-tse-br
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
@@ -80,9 +80,9 @@ No Cursor, abra a configuração de MCP e acrescente o servidor. Troque o caminh
 {
   "mcpServers": {
     "chatse": {
-      "command": "/caminho/da/pasta/chatse/.venv/bin/python",
+      "command": "/caminho/da/pasta/chat-tse-br/.venv/bin/python",
       "args": ["-m", "chatse"],
-      "cwd": "/caminho/da/pasta/chatse"
+      "cwd": "/caminho/da/pasta/chat-tse-br"
     }
   }
 }
