@@ -1,9 +1,11 @@
 import json
+import os
 import re
 import sqlite3
 import sys
 
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 
 from chatse.db import ESQUEMA, caminho_base, conectar
 
@@ -84,6 +86,27 @@ def checar() -> int:
     return 0
 
 
+def preparar_http() -> int:
+    porta = int(os.environ.get("CHATSE_PORT", "8000"))
+    mcp.settings.host = "0.0.0.0"
+    mcp.settings.port = porta
+    mcp.settings.transport_security = TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=[
+            f"127.0.0.1:{porta}",
+            f"localhost:{porta}",
+            "127.0.0.1",
+            "localhost",
+            f"host.docker.internal:{porta}",
+        ],
+        allowed_origins=[
+            f"http://127.0.0.1:{porta}",
+            f"http://localhost:{porta}",
+        ],
+    )
+    return porta
+
+
 def main() -> None:
     if "--checar" in sys.argv:
         try:
@@ -91,6 +114,11 @@ def main() -> None:
         except FileNotFoundError as exc:
             print(exc, file=sys.stderr)
             raise SystemExit(1) from exc
+    if "--http" in sys.argv:
+        porta = preparar_http()
+        print(f"Chatse em http://127.0.0.1:{porta}/mcp", flush=True)
+        mcp.run(transport="streamable-http")
+        return
     mcp.run(transport="stdio")
 
 
